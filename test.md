@@ -1,3 +1,0 @@
-# TESTIM
-ESCHO RAZ!!!
-ESCHO!!
