@@ -1,0 +1,2 @@
+cd Windows
+DiggerOffline.exe

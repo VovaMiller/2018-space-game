@@ -1,0 +1,159 @@
+{
+    "obj_metal_01": {
+        "section": "metal",
+        "position": [0, -32]
+    },
+    "obj_metal_02": {
+        "section": "metal",
+        "position": [32, -32]
+    },
+    "obj_metal_03": {
+        "section": "metal",
+        "position": [64, -32]
+    },
+    "obj_metal_04": {
+        "section": "metal",
+        "position": [96, -32]
+    },
+    "obj_metal_05": {
+        "section": "metal",
+        "position": [128, -32]
+    },
+    "obj_metal_06": {
+        "section": "metal",
+        "position": [160, -32]
+    },
+    "obj_metal_07": {
+        "section": "metal",
+        "position": [192, -32]
+    },
+    "obj_metal_08": {
+        "section": "metal",
+        "position": [224, -32]
+    },
+    "obj_metal_09": {
+        "section": "metal",
+        "position": [256, -32]
+    },
+    "obj_metal_10": {
+        "section": "metal",
+        "position": [288, -32]
+    },
+    
+    "obj_wood_01": {
+        "section": "wood",
+        "position": [32, -64]
+    },
+    "obj_wood_02": {
+        "section": "wood",
+        "position": [32, -96]
+    },
+    "obj_wood_03": {
+        "section": "wood",
+        "position": [32, -128]
+    },
+    "obj_wood_04": {
+        "section": "wood",
+        "position": [32, -160]
+    },
+    "obj_wood_05": {
+        "section": "wood",
+        "position": [32, -192]
+    },
+    "obj_wood_06": {
+        "section": "wood",
+        "position": [32, -224]
+    },
+    
+    "obj_wood_07": {
+        "section": "wood",
+        "position": [256, -64]
+    },
+    "obj_wood_08": {
+        "section": "wood",
+        "position": [256, -96]
+    },
+    "obj_wood_09": {
+        "section": "wood",
+        "position": [256, -128]
+    },
+    "obj_wood_10": {
+        "section": "wood",
+        "position": [256, -160]
+    },
+    "obj_wood_11": {
+        "section": "wood",
+        "position": [256, -192]
+    },
+    "obj_wood_12": {
+        "section": "wood",
+        "position": [256, -224]
+    },
+    
+    "obj_wood_13": {
+        "section": "wood",
+        "position": [0, -192]
+    },
+    "obj_wood_14": {
+        "section": "wood",
+        "position": [64, -192]
+    },
+    "obj_wood_15": {
+        "section": "wood",
+        "position": [96, -192]
+    },
+    "obj_wood_16": {
+        "section": "wood",
+        "position": [128, -192]
+    },
+    "obj_wood_17": {
+        "section": "wood",
+        "position": [160, -192]
+    },
+    "obj_wood_18": {
+        "section": "wood",
+        "position": [192, -192]
+    },
+    "obj_wood_19": {
+        "section": "wood",
+        "position": [224, -192]
+    },
+    "obj_wood_20": {
+        "section": "wood",
+        "position": [288, -192]
+    },
+    
+    "obj_wood_21": {
+        "section": "wood",
+        "position": [32, -224]
+    },
+    "obj_wood_22": {
+        "section": "wood",
+        "position": [64, -256]
+    },
+    "obj_wood_23": {
+        "section": "wood",
+        "position": [96, -288]
+    },
+    "obj_wood_24": {
+        "section": "wood",
+        "position": [128, -320]
+    },
+    "obj_wood_25": {
+        "section": "wood",
+        "position": [160, -320]
+    },
+    "obj_wood_26": {
+        "section": "wood",
+        "position": [192, -288]
+    },
+    "obj_wood_27": {
+        "section": "wood",
+        "position": [224, -256]
+    },
+    "obj_wood_28": {
+        "section": "wood",
+        "position": [256, -224]
+    }
+    
+}

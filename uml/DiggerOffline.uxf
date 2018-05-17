@@ -1,0 +1,2132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>4</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>324</y>
+      <w>168</w>
+      <h>236</h>
+    </coordinates>
+    <panel_attributes>Game
+bg=#48055A
+--
+public:
+  ~Game();
+  static Game* Instance();
+
+  const std::string kGamedata = "gamedata/";
+  const std::string kGamemaps = "gamemaps/";
+  UIHolder* get_ui() const;
+  const GameSettings* get_settings() const;
+  AudioPlayer* get_audio_player() const;
+  Gameplay* get_gameplay() const;
+
+  long long GetMS() const;
+  void Launch();
+  void FatalError();
+  void Pause();
+  void Continue();
+  void NewMap();
+  void LoadMap(const std::string&amp; map_path);
+  void Save();
+  void Halt();
+  void Exit();
+--
+protected:
+  Game();
+--
+private:
+  void Initialize();
+  void Finalize();
+
+  static Game* instance_;
+  GameSettings* settings_;
+  Window* window_;
+  AudioPlayer* audio_player_;
+  UIHolder* ui_;
+  Gameplay* gameplay_;
+  GameState state_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>696</y>
+      <w>184</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>Gameplay
+--
+  friend class GameObjectMotile;
+--
+public:
+  Gameplay();
+  ~Gameplay();
+  
+  void set_last_update(long long ms_cur);
+  const std::string&amp; get_active_map() const;
+  GameObject__Actor* get_actor() const;
+  void NewMap();
+  void LoadMap(const std::string&amp; file_path);
+  void SaveMap();
+  void Halt();
+  void Update(long long ms_cur);
+  void Draw(Window* window) const;
+  void ProcessUserAction(UserActionInfo uai);
+  bool IsOnScreen(GameObject* game_object) const;
+  void UpdateScreenPosition();
+--
+private:
+  std::string active_map_;
+  long long last_update_;
+  Point2DInt screen_position_;
+  Point2DInt actor_spawn_position_;
+  GameObject__Actor* actor_;
+  std::list&lt;GameObject*&gt; objects_;
+  MapGenerator* map_generator_;
+
+  void SpawnActor();
+  void ClearObjects();
+  void DrawObject(Window* window, GameObject* game_object) const;
+  GameObject* GetObject(int x, int y);
+  GameObject* GetObject(const Point2DInt&amp; point);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>556</y>
+      <w>204</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>AudioPlayer_SFML
+--
+public:
+  ~AudioPlayer_SFML();
+
+  void Stop(const std::string&amp; sound_path);
+  void StopAll();
+--
+protected:
+  bool PlayFullPath(const std::string&amp; sound_path, bool interrupt, float volume);
+--
+private:
+  sfStorageSoundsMap storage_sounds_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>340</y>
+      <w>272</w>
+      <h>148</h>
+    </coordinates>
+    <panel_attributes>Window_SFML
+--
+public:
+  Window_SFML(int width, int height, const std::string&amp; game_name);
+  ~Window_SFML();
+
+  void Close();
+  void Clear();
+  void Display();
+  bool GetAction(UserActionInfo&amp; uai);
+--
+protected:
+  bool DrawTextureFullPath(const Point2DInt&amp; pos, const Point2DInt&amp; size, const std::string&amp; texture_path);
+  bool DrawTextFullPath(const std::string&amp; text, const std::string&amp; font_path, int size, const Color&amp; color,
+                                        const Point2DInt&amp; pos, AlignmentX alignment_x, AlignmentY alignment_y);
+--
+private:
+  sf::RenderWindow window_;
+  sf::Event sf_event_;
+  sfStorageTexturesMap storage_textures_;
+  sfStorageFontsMap storage_fonts_;
+
+  sf::Texture* get_texture(const std::string&amp; texture_path);
+  sf::Font* get_font(const std::string&amp; font_path);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1220</x>
+      <y>508</y>
+      <w>64</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>enum UserAction</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>388</x>
+      <y>0</y>
+      <w>100</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>Color
+--
+public:
+  Color();
+  Color(int r, int g, int b);
+  Color(int r, int g, int b, int a);
+  void set_rgb(int r, int g, int b);
+  void set_rgba(int r, int g, int b, int a);
+  void set_r(int r);
+  void set_g(int g);
+  void set_b(int b);
+  void set_a(int a);
+  int get_r() const;
+  int get_g() const;
+  int get_b() const;
+  int get_a() const;
+--
+private:
+  int r_, g_, b_, a_;
+
+  int CheckFormat(int c, int c0);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1172</x>
+      <y>468</y>
+      <w>64</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>struct UserActionInfo
+--
+UserAction ua;
+UserActionType uat;
+int x, y;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>492</x>
+      <y>152</y>
+      <w>152</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Box2DInt
+--
+public:
+  Box2DInt();
+  Box2DInt(int pos_x, int pos_y, int size_x, int size_y);
+  Box2DInt(const Point2DInt&amp; pos, const Point2DInt&amp; size);
+
+  Point2DInt pos_;
+  Point2DInt size_;
+
+  bool operator==(const Box2DInt&amp; other) const;
+  bool operator!=(const Box2DInt&amp; other) const;
+  bool Has(int x, int y) const;
+  bool Has(const Point2DInt&amp; point) const;
+  bool IntersectsWith(const Box2DInt&amp; other) const;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>736</x>
+      <y>936</y>
+      <w>232</w>
+      <h>256</h>
+    </coordinates>
+    <panel_attributes>/GameObject/
+--
+  friend class GameObjectFactory;
+--
+public:
+  GameObject();
+  virtual ~GameObject() {}
+
+  virtual GameObject* Clone() const = 0;
+  void set_pos(const Point2DInt&amp; pos);
+  void set_pos(const Point2D&amp; pos);
+  Point2DInt get_pos() const;
+  const Point2D&amp; get_posd() const;
+  const Point2DInt&amp; get_size() const;
+  const std::string&amp; get_section() const;
+  const std::string&amp; get_texture() const;
+  GameObjectType get_type() const;
+  GameObjectState get_state() const;
+  double Distance(int x, int y) const;
+  double Distance(const Point2DInt&amp; point) const;
+  double Distance(GameObject* other) const;
+  void Remove();
+  bool IsToBeRemoved() const;
+  virtual bool IsActor() const;
+  virtual void Update(long long ms_delta, long long ms_cur) {}
+  virtual void Event(GameObjectEventType event_type, GameObjectEventInfo* event_info);
+  virtual void Serialize(std::ofstream&amp; file) const;
+--
+protected:
+  Point2D pos_;
+  Point2DInt size_;
+  std::string texture_;
+  GameObjectType type_;
+  GameObjectState state_;
+  
+  virtual void Deserialize(std::ifstream&amp; file);
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);
+  virtual bool SetDynamicProperties(const std::string&amp; obj_id, const nlohmann::json&amp; json);
+--
+private:
+  std::string section_;
+  bool to_be_removed_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>772</x>
+      <y>556</y>
+      <w>12</w>
+      <h>148</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;350.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>772</x>
+      <y>908</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1332</x>
+      <y>964</y>
+      <w>232</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>/GameObjectMotile/
+--
+  friend class GameObjectFactory;
+--
+public:
+  GameObjectMotile();
+  virtual ~GameObjectMotile() {}
+
+  static const double kAccelGravi = 9.8;
+  static const int kPixelsPerMeter = 64;
+  static const int kUpdateRadius = 768;
+  const double kDefaultVelocity = 2.5;
+  const double kDefaultForcePull = 1500;
+  const double kDefaultForceStop = 750;
+
+  double get_mass() const;
+  bool is_weightless() const;
+  const Point2D&amp; get_velocity() const;
+  void AddForce(Force force);
+  void Jump();
+  void SetMovingDirection(const Point2DInt&amp; dir);
+  virtual void Update(long long ms_delta, long long ms_cur);
+  virtual void Event(GameObjectEventType event_type, GameObjectEventInfo* event_info);
+  virtual void Serialize(std::ofstream&amp; file) const;
+--
+protected:
+  virtual void Deserialize(std::ifstream&amp; file);
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);
+  virtual bool SetDynamicProperties(const std::string&amp; obj_id, const nlohmann::json&amp; json);
+  virtual void set_velocity(const Point2D&amp; velocity);
+--
+private:
+  double mass_;
+  bool weightless_;
+  Point2D velocity_;
+  Point2DInt moving_direction_;
+  std::list&lt;Force&gt; forces_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1084</x>
+      <y>964</y>
+      <w>232</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>/GameObjectDestroyable/
+--
+  friend class GameObjectFactory;
+--
+public:
+  GameObjectDestroyable();
+  virtual ~GameObjectDestroyable() {}
+
+  int get_condition() const;
+  int get_condition_total() const;
+  
+  virtual void Update(long long ms_delta, long long ms_cur);
+  virtual void Event(GameObjectEventType event_type, GameObjectEventInfo* event_info);
+  virtual void Serialize(std::ofstream&amp; file) const;
+--
+protected:
+  int condition_;
+  int condition_total_;
+  std::string sound_hit_;
+
+  virtual void Deserialize(std::ifstream&amp; file);
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);
+  virtual bool SetDynamicProperties(const std::string&amp; obj_id, const nlohmann::json&amp; json);
+  void Damage(int dmg, GameObject* who);
+  void Repair(int hp, GameObject* who);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>820</x>
+      <y>576</y>
+      <w>80</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>enum GameState
+--
+kStateOffline,
+kStateIntro,
+kStatePlaying,
+kStatePaused</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>876</x>
+      <y>556</y>
+      <w>12</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>952</x>
+      <y>284</y>
+      <w>228</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>/Tools/
+--
+public:
+  virtual Window* CreateWindow(int width, int height, const std::string&amp; game_name) = 0;
+  virtual AudioPlayer* CreateAudioPlayer() = 0;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>284</y>
+      <w>244</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>/Tools_SFML/
+--
+public:
+  Window* CreateWindow(int width, int height, const std::string&amp; game_name);
+  AudioPlayer* CreateAudioPlayer();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>952</x>
+      <y>340</y>
+      <w>300</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>/Window/
+--
+public:
+  virtual ~Window() {}
+
+  virtual void Close() = 0;
+  virtual void Clear() = 0;
+  virtual void Display() = 0;
+  void DrawTexture(const Point2DInt&amp; pos, const Point2DInt&amp; size, const std::string&amp; texture_path);
+  void DrawText(const std::string&amp; text, const std::string&amp; font_path, int size, const Color&amp; color,
+                           const Point2DInt&amp; pos, AlignmentX alignment_x = kLeftX, AlignmentY alignment_y = kTopY);
+  virtual bool GetAction(UserActionInfo&amp; uai) = 0;
+--
+protected:
+  virtual bool DrawTextureFullPath(const Point2DInt&amp; pos, const Point2DInt&amp; size, const std::string&amp; texture_path) = 0;
+  virtual bool DrawTextFullPath(const std::string&amp; text, const std::string&amp; font_path, int size, const Color&amp; color,
+                                                   const Point2DInt&amp; pos, AlignmentX alignment_x, AlignmentY alignment_y) = 0;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>956</x>
+      <y>560</y>
+      <w>228</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>/AudioPlayer/
+--
+public:
+  virtual ~AudioPlayer() {}
+
+  void Play(const std::string&amp; sound_path, bool interrupt);
+  virtual void Stop(const std::string&amp; sound_path) = 0;
+  virtual void StopAll() = 0;
+--
+protected:
+  virtual bool PlayFullPath(const std::string&amp; sound_path, bool interrupt, float volume) = 0;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>308</y>
+      <w>48</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>80.0;130.0;100.0;130.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1248</x>
+      <y>368</y>
+      <w>40</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>572</y>
+      <w>108</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>444</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>496</y>
+      <w>12</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1176</x>
+      <y>300</y>
+      <w>112</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>296</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>280.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>924</x>
+      <y>360</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>924</x>
+      <y>376</y>
+      <w>40</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;470.0;30.0;470.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1480</x>
+      <y>292</y>
+      <w>96</w>
+      <h>276</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;670.0;220.0;670.0;220.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1424</x>
+      <y>1240</y>
+      <w>232</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>/GameObject_DM/
+--
+  friend class GameObjectFactory;
+--
+public:
+  virtual ~GameObject_DM() {}
+
+  virtual void Update(long long ms_delta, long long ms_cur);
+  virtual void Event(GameObjectEventType event_type, GameObjectEventInfo* event_info);
+  virtual void Serialize(std::ofstream&amp; file) const;
+--
+protected:
+  virtual void Deserialize(std::ifstream&amp; file);
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);
+  virtual bool SetDynamicProperties(const std::string&amp; obj_id, const nlohmann::json&amp; json);
+  virtual void set_velocity(const Point2D&amp; velocity);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>0</y>
+      <w>128</w>
+      <h>172</h>
+    </coordinates>
+    <panel_attributes>Point2D
+--
+public:
+  Point2D();
+  Point2D(double x0, double y0);
+  Point2D(const Point2DInt&amp; point);
+  
+  void operator=(const Point2D&amp; other);
+  Point2D operator+(const Point2D&amp; other) const;
+  Point2D operator+=(const Point2D&amp; other);
+  Point2D operator-(const Point2D&amp; other) const;
+  Point2D operator-=(const Point2D&amp; other);
+  Point2D operator*(double d) const;
+  Point2D operator*=(double d);
+  Point2D operator/(double d) const;
+  Point2D operator/=(double d);
+  double&amp; operator[](int dim);
+  double operator*(const Point2D&amp; other) const;
+  double operator^(const Point2D&amp; other) const;
+  bool operator==(const Point2D&amp; other) const;
+  bool operator!=(const Point2D&amp; other) const;
+  double len2() const;
+  double len() const;
+  double get_angle(const Point2D&amp; other) const;
+  double get_cos(const Point2D&amp; other) const;
+  
+  double x, y;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>416</x>
+      <y>608</y>
+      <w>168</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes>/UIElement/
+--
+public:
+  UIElement();
+  virtual ~UIElement() {}
+
+  const std::string&amp; get_id() const;
+  void Initialize(const std::string&amp; id, const nlohmann::json&amp; json);
+  void Draw(Window* window) const;
+  virtual void ProcessUserAction(UserActionInfo uai) = 0;
+--
+protected:
+  std::string id_;
+  Point2DInt pos_;
+  Point2DInt size_;
+  std::string texture_;
+  std::string text_;
+  std::string text_font_;
+  int text_size_;
+  Color text_color_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>556</x>
+      <y>324</y>
+      <w>212</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;510.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>524</x>
+      <y>728</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>1288</y>
+      <w>84</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>enum GameObjectEventType
+--
+kObjEventDeath,
+kObjEventDamage,
+kObjEventRepair</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>856</x>
+      <y>1216</y>
+      <w>84</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>/GameObjectEventInfo/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>872</x>
+      <y>1240</y>
+      <w>168</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>GameObjectEventInfo_dCondition
+--
+public:
+  GameObjectEventInfo_dCondition(int delta, GameObject* who);
+
+  int get_delta() const;
+  GameObject* get_who() const;
+--
+private:
+  int delta_;
+  GameObject* who_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>1224</y>
+      <w>20</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;30.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>1188</y>
+      <w>24</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;170.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>1188</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>1252</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>enum GameObjectType
+--
+kObjTypeThrough = 0,
+kObjTypeImpenetrable = 1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>1188</y>
+      <w>24</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;260.0;10.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1572</x>
+      <y>964</y>
+      <w>52</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>struct Force
+--
+Point2D force;
+long long deadline;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1560</x>
+      <y>964</y>
+      <w>20</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>964</x>
+      <y>936</y>
+      <w>388</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;950.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>936</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>436</y>
+      <w>140</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>/UI/
+--
+public:
+  UI();
+  virtual ~UI();
+
+  virtual void Draw(Window* window) const;
+  void ProcessUserAction(UserActionInfo uai);
+  virtual void OnLoad() = 0;
+  virtual void OnClose() = 0;
+  virtual void Update() = 0;
+--
+protected:
+  std::vector&lt;UIElement*&gt; ui_elements_;
+--
+private:
+  friend class UIHolder;
+  UI* parent_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>340</y>
+      <w>112</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>UIStartMenu
+--
+public:
+  UIStartMenu();
+
+  virtual void Draw(Window* window) const;
+  virtual void OnLoad();
+  virtual void OnClose();
+  virtual void Update();
+--
+private:
+  std::string background_;
+  std::string sound_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>340</y>
+      <w>64</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>UIPlaying
+--
+public:
+  UIPlaying();
+
+  virtual void OnLoad();
+  virtual void OnClose();
+  virtual void Update();
+--
+private:
+  std::string sound_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>184</x>
+      <y>340</y>
+      <w>112</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>UIGameMenu
+--
+public:
+  UIGameMenu();
+
+  virtual void Draw(Window* window) const;
+  virtual void OnLoad();
+  virtual void OnClose();
+  virtual void Update();
+--
+private:
+  std::string background_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>68</x>
+      <y>340</y>
+      <w>112</w>
+      <h>92</h>
+    </coordinates>
+    <panel_attributes>UIMapMenu
+--
+public:
+  UIMapMenu();
+
+  virtual void Draw(Window* window) const;
+  virtual void OnLoad();
+  virtual void OnClose();
+  virtual void Update();
+--
+private:
+  std::string background_;
+  nlohmann::json json_btn_map_;
+
+  void UpdateMapButtons();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>404</x>
+      <y>436</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>504</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>*json.hpp*
+lw=3
+bg=#777777</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>524</x>
+      <y>540</y>
+      <w>12</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1592</x>
+      <y>456</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>*SFML*
+lw=3
+bg=#777777</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1548</x>
+      <y>408</y>
+      <w>52</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110.0;130.0;70.0;130.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1480</x>
+      <y>456</y>
+      <w>104</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>240.0;10.0;240.0;300.0;10.0;300.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>468</y>
+      <w>64</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>enum AlignmentX
+--
+kLeftX,
+kCenterX,
+kRightX</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>976</x>
+      <y>444</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1028</x>
+      <y>468</y>
+      <w>64</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>enum AlignmentY
+--
+kTopY,
+kCenterY,
+kBottomY</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1036</x>
+      <y>444</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>416</x>
+      <y>756</y>
+      <w>168</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/UIButton/
+--
+public:
+  UIButton(Action* action);
+  virtual ~UIButton();
+  
+  virtual void ProcessUserAction(UserActionInfo uai);
+--
+private:
+  Action* action_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>332</x>
+      <y>756</y>
+      <w>64</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/Action/
+--
+public:
+  virtual ~Action() {}
+  
+  virtual void Act() = 0;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>756</y>
+      <w>32</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>756</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Action_OpenMapMenu/
+--
+public:
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>792</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Action_Exit/
+--
+public:
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>188</x>
+      <y>828</y>
+      <w>124</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>/Action_LoadMap/
+--
+public:
+  Action_LoadMap(const std::string&amp; map_path);
+  
+  std::string map_path_;
+
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>888</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Action_Back/
+--
+public:
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>32</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;190.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;340.0;10.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>416</y>
+      <w>24</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;40.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>556</x>
+      <y>504</y>
+      <w>76</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>170.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>284</x>
+      <y>408</y>
+      <w>128</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;300.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>168</x>
+      <y>428</y>
+      <w>244</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;590.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>52</x>
+      <y>404</y>
+      <w>360</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;880.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>432</x>
+      <y>292</y>
+      <w>128</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>UIHolder
+--
+public:
+  UIHolder();
+  ~UIHolder();
+
+  void Draw(Window* window) const;
+  void ProcessUserAction(UserActionInfo uai);
+  void Update();
+  void Back();
+  void SwitchToStartMenu();
+  void SwitchToPlaying();
+  void SwitchToGameMenu();
+  void SwitchToMapMenu();
+--
+private:
+  UI* ui_active_;
+  UIStartMenu* ui_start_menu_;
+  UIPlaying* ui_playing_;
+  UIGameMenu* ui_game_menu_;
+  UIMapMenu* ui_map_menu_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>524</x>
+      <y>420</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>388</x>
+      <y>324</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>52</x>
+      <y>324</y>
+      <w>388</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;950.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>284</x>
+      <y>324</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>168</x>
+      <y>324</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>52</x>
+      <y>324</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>924</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Action_Save/
+--
+public:
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;430.0;10.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>224</x>
+      <y>688</y>
+      <w>88</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/ActionMacro/
+--
+public:
+  virtual ~ActionMacro();
+  
+  virtual void Act();
+  void AddAction(Action* action);
+--
+private:
+  std::vector&lt;Action*&gt; actions_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>700</y>
+      <w>24</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;150.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>340</y>
+      <w>128</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>GameSettings
+--
+public:
+  GameSettings(const std::string&amp; settings_file);
+
+  int get_window_width() const;
+  int get_window_height() const;
+  float get_sounds_volume() const;
+  const std::string&amp; get_game_name() const;
+  const std::string&amp; get_default_text_font() const;
+  int get_default_text_size() const;
+  const Color&amp; get_default_text_color() const;
+--
+private:
+  int window_width_;
+  int window_height_;
+  float sounds_volume_;
+  std::string game_name_;
+  std::string default_text_font_;
+  int default_text_size_;
+  Color default_text_color_;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>724</x>
+      <y>340</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>468</y>
+      <w>12</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>144</x>
+      <y>960</y>
+      <w>168</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Action_PlaySound/
+--
+public:
+  Action_PlaySound(const std::string&amp; sound_path, bool interrupt);
+  
+  std::string sound_path_;
+  bool interrupt_;
+
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>1028</y>
+      <w>132</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>/Action_StopSound/
+--
+public:
+  Action_StopSound(const std::string&amp; sound_path);
+  
+  std::string sound_path_;
+
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;520.0;10.0;520.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>284</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;690.0;10.0;690.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>1088</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Action_NewMap/
+--
+public:
+  virtual void Act();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>756</y>
+      <w>24</w>
+      <h>344</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;840.0;10.0;840.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>932</x>
+      <y>772</y>
+      <w>212</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>GameObjectFactory
+--
+  friend class Gameplay;
+--
+public:
+  static GameObject* Create(const std::string&amp; obj_id, const nlohmann::json&amp; json);
+--
+private:
+  static GameObject* Create(std::ifstream&amp; file);
+  static GameObject* CreatePure(const std::string&amp; obj_class);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>1216</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>enum GameObjectState
+--
+kObjStateOnline = 0,
+kObjStateOffline = 1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>1216</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1340</x>
+      <y>936</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1096</x>
+      <y>1112</y>
+      <w>12</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;320.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1288</x>
+      <y>1112</y>
+      <w>160</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;260.0;380.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1340</x>
+      <y>1184</y>
+      <w>12</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1436</x>
+      <y>1212</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1084</x>
+      <y>1240</y>
+      <w>232</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>/GameObject_D/
+--
+  friend class GameObjectFactory;
+--
+public:
+  virtual ~GameObject_D() {}
+
+  virtual void Update(long long ms_delta, long long ms_cur);
+  virtual void Event(GameObjectEventType event_type, GameObjectEventInfo* event_info);
+  virtual void Serialize(std::ofstream&amp; file) const;
+--
+protected:
+  virtual void Deserialize(std::ifstream&amp; file);
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);
+  virtual bool SetDynamicProperties(const std::string&amp; obj_id, const nlohmann::json&amp; json);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>772</y>
+      <w>120</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>GameplayConfigs
+--
+public:
+  ~GameplayConfigs();
+  
+  static GameplayConfigs* Instance();
+  const nlohmann::json&amp; get_objects() const;
+--
+private:
+  GameplayConfigs();
+  
+  static GameplayConfigs* instance_;
+  nlohmann::json objects_;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>956</x>
+      <y>848</y>
+      <w>224</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>540.0;10.0;540.0;200.0;10.0;200.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>772</y>
+      <w>32</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>808</y>
+      <w>28</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;320.0;10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>872</x>
+      <y>772</y>
+      <w>68</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1116</x>
+      <y>744</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>*json.hpp*
+lw=3
+bg=#777777</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1088</x>
+      <y>744</y>
+      <w>36</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1156</x>
+      <y>744</y>
+      <w>32</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0;60.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>932</x>
+      <y>836</y>
+      <w>172</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>BinaryFile
+--
+public:
+  static void WriteInt(std::ofstream&amp; file, int n);
+  static int ReadInt(std::ifstream&amp; file);
+  static void WriteLongLong(std::ofstream&amp; file, long long n);
+  static long long ReadLongLong(std::ifstream&amp; file);
+  static void WriteDouble(std::ofstream&amp; file, double d);
+  static double ReadDouble(std::ifstream&amp; file);
+  static void WriteString(std::ofstream&amp; file, const std::string&amp; str);
+  static std::string ReadString(std::ifstream&amp; file);
+  static void WriteBool(std::ofstream&amp; file, bool b);
+  static bool ReadBool(std::ifstream&amp; file);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>824</y>
+      <w>12</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>916</y>
+      <w>12</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1108</x>
+      <y>1344</y>
+      <w>224</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>GameObject__Block
+--
+  friend class GameObjectFactory;
+  friend class MapGenerator;
+--
+public:
+  GameObject__Block();
+  virtual ~GameObject__Block() {}
+
+  static const int kBlockSize = 32;
+
+  virtual GameObject* Clone();
+  int get_spawn_min_layer() const;
+  int get_spawn_max_layer() const;
+  unsigned int get_spawn_w() const;
+--
+protected:
+  int spawn_min_y;
+  int spawn_max_y;
+  unsigned int spawn_w;
+
+  virtual bool SetStaticProperties(const std::string&amp; section, const nlohmann::json&amp; json);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1084</x>
+      <y>1324</y>
+      <w>32</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;60.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1448</x>
+      <y>1352</y>
+      <w>132</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>GameObject__Actor
+--
+  friend class GameObjectFactory;
+  friend class Gameplay;
+--
+public:
+  GameObject__Actor();
+  virtual ~GameObject__Actor() {}
+
+  const double kInteractionRange = 64.0;
+
+  virtual GameObject* Clone();
+  virtual bool IsActor() const;
+--
+private:
+  void InteractWith(GameObject* obj, int x, int y);
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1424</x>
+      <y>1332</y>
+      <w>32</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;60.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>492</x>
+      <y>0</y>
+      <w>140</w>
+      <h>148</h>
+    </coordinates>
+    <panel_attributes>Point2DInt
+--
+public:
+  Point2DInt();
+  Point2DInt(int x0, int y0);
+
+  void operator=(const Point2DInt&amp; other);
+  Point2DInt operator+(const Point2DInt&amp; other) const;
+  Point2DInt operator+=(const Point2DInt&amp; other);
+  Point2DInt operator-(const Point2DInt&amp; other) const;
+  Point2DInt operator-=(const Point2DInt&amp; other);
+  Point2DInt operator*(int d) const;
+  Point2DInt operator*=(int d);
+  Point2DInt operator/(int d) const;
+  Point2DInt operator/=(int d);
+  bool operator==(const Point2DInt&amp; other) const;
+  bool operator!=(const Point2DInt&amp; other) const;
+  int&amp; operator[](int dim);
+  int operator^(const Point2DInt&amp; other) const;
+  int len2() const;
+  double len() const;
+
+  int x, y;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1148</x>
+      <y>508</y>
+      <w>64</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>enum UserActionType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>496</y>
+      <w>12</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1316</x>
+      <y>520</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>struct SoundPack
+--
+sf::SoundBuffer* sound;
+sf::Sound* player;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1328</x>
+      <y>540</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>936</y>
+      <w>204</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>MapGenerator
+--
+public:
+  MapGenerator(int last_layer);
+  ~MapGenerator();
+  
+  static const int kMapRadiusX = 768;
+  static const int kGeneratorRadiusY = 512;
+
+  int get_next_layer() const;
+  void Tweak(GameObject__Actor* actor, std::list&lt;GameObject*&gt;&amp; objects);
+--
+private:
+  int next_layer_;
+  std::list&lt;GameObject__Block*&gt; prototypes_;
+
+  GameObject* GetRandomBlock() const;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>848</y>
+      <w>52</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;220.0;10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>176</y>
+      <w>152</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Box2D
+--
+public:
+  Box2D();
+  Box2D(double pos_x, double pos_y, double size_x, double size_y);
+  Box2D(const Point2D&amp; pos, const Point2D&amp; size);
+  Box2D(const Box2DInt&amp; box);
+
+  Point2D pos_;
+  Point2D size_;
+
+  bool operator==(const Box2D&amp; other) const;
+  bool operator!=(const Box2D&amp; other) const;
+  bool Has(double x, double y) const;
+  bool Has(const Point2D&amp; point) const;
+  bool IntersectsWith(const Box2D&amp; other) const;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>0</y>
+      <w>124</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>utils_double
+type=actclass
+--
+  bool is_zero(double d);
+  int sign(double d);
+  bool are_equal(double x, double y);
+  bool is_less_than(double x, double y);
+  bool is_more_than(double x, double y);
+  bool is_less_or_equal(double x, double y);
+  bool is_more_or_equal(double x, double y);
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

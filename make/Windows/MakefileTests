@@ -1,0 +1,92 @@
+DIR_ROOT = ../..
+
+# "Digger Offline" properties.
+DIR_DO_OBJ = obj_do
+DIR_DO_SRC = $(DIR_ROOT)/src
+DIR_DO_INCLUDE = $(DIR_ROOT)/include
+DO_HEADERS = $(wildcard $(DIR_DO_INCLUDE)/DiggerOffline/*.h)
+DO_SRCS = $(patsubst $(DIR_DO_INCLUDE)/DiggerOffline/%.h,$(DIR_DO_SRC)/%.cpp,$(DO_HEADERS))
+DO_OBJS = $(patsubst $(DIR_DO_SRC)/%.cpp,$(DIR_DO_OBJ)/%.o,$(DO_SRCS))
+
+# GoogleTest's properties.
+DIR_GTEST_OBJ = obj_gtest
+DIR_GTEST_SRC = $(DIR_ROOT)/googletest/src
+DIR_GTEST_INCLUDE = $(DIR_ROOT)/googletest/include
+GTEST_HEADERS = $(DIR_GTEST_INCLUDE)/gtest/*.h $(DIR_GTEST_INCLUDE)/gtest/internal/*.h
+GTEST_SRCS = $(DIR_GTEST_SRC)/*.cc $(DIR_GTEST_SRC)/*.h $(GTEST_HEADERS)
+GTEST_OBJS = $(DIR_GTEST_OBJ)/gtest-all.o $(DIR_GTEST_OBJ)/gtest_main.o
+
+# Tests' properties.
+DIR_TESTS_OBJ = obj_tests
+DIR_TESTS_SRC = $(DIR_ROOT)/googletest
+TESTS_SRCS = $(wildcard $(DIR_TESTS_SRC)/*.cpp)
+TESTS_OBJS = $(patsubst $(DIR_TESTS_SRC)/%.cpp,$(DIR_TESTS_OBJ)/%.o,$(TESTS_SRCS))
+
+# Linker
+DIR_BIN = $(DIR_ROOT)/bin/Windows
+EXE = $(DIR_BIN)/DiggerOfflineTest.exe
+LIBS = -lpthread -L$(DIR_BIN) -lsfml-audio-2 -lsfml-graphics-2 -lsfml-system-2 -lsfml-window-2
+
+
+############
+# Building #
+############
+all: compile_do compile_gtest compile_tests $(EXE)
+
+$(EXE): $(DO_OBJS) $(GTEST_OBJS) $(TESTS_OBJS)
+	$(CXX) $(LIBS) -o $@ $^
+
+clean: clean_do clean_gtest clean_tests
+
+
+###############################
+# Compiling "Digger Offline". #
+###############################
+compile_do: mkdir_obj_do $(DO_OBJS)
+
+mkdir_obj_do:
+	mkdir -p $(DIR_DO_OBJ)
+
+$(DIR_DO_OBJ)/%.o: $(DIR_DO_SRC)/%.cpp
+	$(CXX) -std=c++11 -I$(DIR_DO_INCLUDE) -c -o $@ $<
+
+clean_do:
+	rm -rf $(DIR_DO_OBJ)
+
+
+#########################
+# Compiling GoogleTest. #
+#########################
+CPPFLAGS += -isystem $(DIR_GTEST_INCLUDE)
+CXXFLAGS += -g -Wall -Wextra -pthread
+
+compile_gtest : mkdir_obj_gtest $(GTEST_OBJS)
+
+mkdir_obj_gtest:
+	mkdir -p $(DIR_GTEST_OBJ)
+
+$(DIR_GTEST_OBJ)/gtest-all.o : $(GTEST_SRCS)
+	$(CXX) $(CPPFLAGS) -I$(DIR_ROOT)/googletest $(CXXFLAGS) \
+            -o $@ -c $(DIR_GTEST_SRC)/gtest-all.cc
+
+$(DIR_GTEST_OBJ)/gtest_main.o : $(GTEST_SRCS)
+	$(CXX) $(CPPFLAGS) -I$(DIR_ROOT)/googletest $(CXXFLAGS) \
+            -o $@ -c $(DIR_GTEST_SRC)/gtest_main.cc
+
+clean_gtest:
+	rm -rf $(DIR_GTEST_OBJ)
+
+
+####################
+# Compiling Tests. #
+####################
+compile_tests: mkdir_obj_tests $(TESTS_OBJS)
+
+mkdir_obj_tests:
+	mkdir -p $(DIR_TESTS_OBJ)
+
+$(DIR_TESTS_OBJ)/%.o: $(DIR_TESTS_SRC)/%.cpp
+	$(CXX) -std=c++11 -I$(DIR_DO_INCLUDE) -I$(DIR_GTEST_INCLUDE) -c -o $@ $<
+
+clean_tests:
+	rm -rf $(DIR_TESTS_OBJ)

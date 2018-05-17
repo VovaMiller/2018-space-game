@@ -1,0 +1,29 @@
+{
+   "background": "ui/ui_mainmenu.png",
+   "btn_back": {
+       "position": [10, 10],
+       "size": [128, 32],
+       "texture": "ui/ui_button.png",
+       "text": "Back",
+       "text_font": "arial.ttf",
+       "text_size": 16,
+       "text_color": [128, 128, 128]
+   },
+   "btn_new_map": {
+       "position": [100, 100],
+       "size": [128, 32],
+       "texture": "ui/ui_button.png",
+       "text": "New map",
+       "text_font": "arial.ttf",
+       "text_size": 16,
+       "text_color": [255, 255, 255]
+   },
+   "btn_map": {
+       "position": [100, 148],
+       "size": [128, 32],
+       "texture": "ui/ui_button.png",
+       "text_font": "arial.ttf",
+       "text_size": 14,
+       "text_color": [200, 200, 200]
+   }
+}
