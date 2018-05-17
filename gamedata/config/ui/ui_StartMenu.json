@@ -1,0 +1,22 @@
+{
+   "background": "ui/ui_mainmenu.png",
+   "sound": "music/mainmenu.ogg",
+   "btn_play": {
+       "position": [50, 32],
+       "size": [128, 32],
+       "texture": "ui/ui_button.png",
+       "text": "Play",
+       "text_font": "arial.ttf",
+       "text_size": 16,
+       "text_color": [255, 255, 255]
+   },
+   "btn_exit": {
+       "position": [50, 80],
+       "size": [128, 32],
+       "texture": "ui/ui_button.png",
+       "text": "Exit game",
+       "text_font": "arial.ttf",
+       "text_size": 16,
+       "text_color": [255, 255, 255]
+   }
+}

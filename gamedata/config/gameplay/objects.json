@@ -1,0 +1,58 @@
+{
+    "actor": {
+        "class": "GameObject__Actor",
+        "size": [32, 64],
+        "texture": "objects/actor.png",
+        "condition_total": 100,
+        "mass": 55,
+        "weightless": 0
+    },
+    "earth": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_earth.png",
+        "condition_total": 100,
+        "spawn_min_layer": 0,
+        "spawn_max_layer": 4,
+        "spawn_w": 10,
+        "sound_hit": "objects/earth_hit.ogg"
+    },
+    "rock": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_rock.png",
+        "condition_total": 200,
+        "spawn_min_layer": 5,
+        "spawn_w": 10,
+        "sound_hit": "objects/rock_hit.ogg"
+    },
+    "substance": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_substance.png",
+        "condition_total": 200,
+        "spawn_min_layer": 20,
+        "spawn_w": 1,
+        "sound_hit": "objects/rock_hit.ogg"
+    },
+    "coal": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_coal.png",
+        "condition_total": 200,
+        "spawn_min_layer": 10,
+        "spawn_w": 1,
+        "sound_hit": "objects/coal_hit.ogg"
+    },
+    "metal": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_metal.png",
+        "condition_total": 300,
+        "spawn_w": 0,
+        "sound_hit": "objects/metal_hit.ogg"
+    },
+    "wood": {
+        "class": "GameObject__Block",
+        "texture": "objects/block_wood.png",
+        "condition_total": 90,
+        "spawn_w": 0,
+        "sound_hit": "objects/wood_hit.ogg"
+    }
+    
+}

@@ -1,0 +1,9 @@
+{
+   "window_width": 512,
+   "window_height": 512,
+   "sounds_volume": 20.0,
+   "game_name": "Digger Offline 2D",
+   "default_text_font": "arial.ttf",
+   "default_text_size": 12,
+   "default_text_color": [0, 0, 0]
+}
